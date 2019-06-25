@@ -1,0 +1,2 @@
+Taverns, bars, shops, gas stations ... <br>
+On the interactive map, choose a category by clicking on <img alt="layers" src="../../assets/icon_layer.jpg" id="layers-icon">

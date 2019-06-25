@@ -1,0 +1,2 @@
+Tavernes, bars, magasins, stations-services... <br>
+Sur la carte interactive, choississez une catégorie en cliquant sur <img alt="layers" src="../../assets/icon_layer.jpg" id="layers-icon">
