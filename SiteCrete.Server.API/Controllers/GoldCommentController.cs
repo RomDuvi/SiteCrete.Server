@@ -31,6 +31,14 @@ namespace SiteCrete.Server.API.Controllers
             return Ok(link);
         }
 
+        [HttpGet]
+        [Route("evaluationAverage")]
+        public IActionResult GetEvalutaionAverage()
+        {
+            var average = Repository.GetEvaluationAverage();
+            return Ok(average);
+        }
+
         #endregion        
         #region POST
         [HttpPost]

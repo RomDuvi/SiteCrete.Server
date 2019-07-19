@@ -2857,5 +2857,6 @@
     "CSharpLanguageVersion": 703
   },
   "RootNamespace": "SiteCrete.Server.API",
-  "Documents": []
+  "Documents": [],
+  "SerializationFormat": "0.1"
 }

@@ -4,6 +4,6 @@ namespace SiteCrete.Server.API.Client.Interfaces
 {
     public interface IGoldCommentRepository : IBaseRepository<GoldComment>
     {
-         
+        int GetEvaluationAverage();
     }
 }

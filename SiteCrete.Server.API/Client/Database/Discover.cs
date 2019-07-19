@@ -6,7 +6,8 @@ namespace SiteCrete.Server.API.Client.Database
     [Alias("discover")]
     public class Discover : BaseModel
     {
-        public string Title { get; set; }
+        public string TitleFr { get; set; }
+        public string TitleEn { get; set; }
         public string Distance { get; set; }
         public string Duration { get; set; }
         public string DistanceDuration { get; set; }
