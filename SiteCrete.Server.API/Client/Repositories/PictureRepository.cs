@@ -31,24 +31,16 @@ namespace SiteCrete.Server.API.Client.Repositories
             picture.Id = Guid.NewGuid();
             using (var connection = ConnectionFactory.Open())
             {
-                var lastPic = connection.Select<Picture>().OrderByDescending(p => p.Order).FirstOrDefault();
+                var lastPic = connection.Select<Picture>().Where(x => x.CategoryId == picture.CategoryId).OrderByDescending(p => p.Order).FirstOrDefault();
                 if (lastPic == null)
                 {
-                    picture.Order = 0;
+                    picture.Order = 1;
                 } 
                 else 
                 {
                     picture.Order = lastPic.Order + 1;
                 }
             }
-
-            if (picture.PictureCategories != null) {
-                foreach(var pcat in picture.PictureCategories)
-                {
-                    pcat.Id = Guid.NewGuid();
-                    pcat.PictureId = picture.Id;
-                }
-            } 
             
             var date = DateTime.Now;
 
@@ -96,6 +88,48 @@ namespace SiteCrete.Server.API.Client.Repositories
 
         #endregion
 
+
+        #region UPDATE
+
+        public override Picture Update(Picture entity) 
+        {
+            using(var connection = ConnectionFactory.Open()) 
+            {
+                var currentOrder = connection.Select<Picture>().Where(x => x.Id == entity.Id).Select(x => x.Order).First();
+                var newOrder = entity.Order;
+                var query = "";
+
+                if(currentOrder > newOrder) 
+                {
+                    query = $@"
+                                UPDATE pictures p
+                                SET p.`order` = p.`order` + 1
+                                WHERE p.categoryId = '{entity.CategoryId.ToString()}'
+                                AND p.`order` >= {newOrder}
+                                AND p.`order` < {currentOrder}
+                            ";
+                } 
+                else if (currentOrder < newOrder)
+                {
+                    query = $@"
+                                UPDATE pictures p
+                                SET p.`order` = p.`order` - 1
+                                WHERE p.categoryId = '{entity.CategoryId.ToString()}'
+                                AND p.`order` <= {newOrder}
+                                AND p.`order` > {currentOrder}
+                            ";
+                }
+
+                if (currentOrder != newOrder)
+                {
+                    connection.ExecuteSql(query);
+                }
+            }
+            return base.Update(entity);
+        }
+
+        #endregion
+
         public byte[] GetPictureFile(Guid pictureId)
         {
             var picture = GetById(pictureId);
@@ -123,14 +157,19 @@ namespace SiteCrete.Server.API.Client.Repositories
             {
                 throw new ArgumentException("Can't find picture");
             }
+
             using (var connection = ConnectionFactory.Open())
             {
-                connection.DeleteByIds<PictureCategory>(picture.PictureCategories.Select(x => x.Id));
                 connection.DeleteById<Picture>(picture.Id);
                 File.Delete(picture.Path);
-                connection.ExecuteSql($@"UPDATE pictures p
+
+                if (p.CategoryId != null)
+                {
+                    connection.ExecuteSql($@"UPDATE pictures p
                                         SET p.order = p.order - 1
-                                        WHERE p.order > {p.Order}");
+                                        WHERE p.order > {p.Order} 
+                                        AND p.categoryId = '{p.CategoryId.ToString()}'");
+                }
             }
         }
 
@@ -138,8 +177,8 @@ namespace SiteCrete.Server.API.Client.Repositories
         {
             using (var connection = ConnectionFactory.Open())
             {
-                var ids = connection.Select<PictureCategory>(x => x.CategoryId == categoryId).Select(x => x.PictureId);
-                return connection.Select<Picture>(x => ids.Contains(x.Id));
+                var pictures = connection.Select<Picture>(x => x.CategoryId == categoryId);
+                return pictures;
             }
         }
 

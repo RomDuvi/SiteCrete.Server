@@ -17,8 +17,8 @@ namespace SiteCrete.Server.API.Client.Database
         public int Order { get; set; }
         [ForeignKey(typeof(Discover))]
         public Guid? DiscoverId { get; set; }
-        [Reference]
-        public List<PictureCategory> PictureCategories{ get; set;} 
+        [ForeignKey(typeof(Category))]
+        public Guid? CategoryId { get; set; }
         [Ignore]
         public string FileName { get; set; }
         [Ignore]

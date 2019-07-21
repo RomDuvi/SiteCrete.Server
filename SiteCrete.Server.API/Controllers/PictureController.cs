@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SiteCrete.Server.API.Client.Database;
 using SiteCrete.Server.API.Client.Interfaces;
-using SiteCrete.Server.API.Client.Repositories;
 using Newtonsoft.Json;
 
 namespace SiteCrete.Server.API.Controllers

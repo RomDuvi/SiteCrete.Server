@@ -49,10 +49,6 @@ namespace SiteCrete.Server.API.Client.Repositories
             {
                 throw new ArgumentException("Can't find category to delete");
             }
-            if(category.PictureCategories.Any())
-            {
-                throw new InvalidOperationException("Can't delete category beacause they are pictures in it!");
-            }
             using (var connection = ConnectionFactory.Open())
             {
                 if(!string.IsNullOrEmpty(category.FilePath))

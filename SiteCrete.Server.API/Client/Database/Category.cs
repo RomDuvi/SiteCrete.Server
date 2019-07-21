@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using ServiceStack.DataAnnotations;
 
@@ -13,9 +12,6 @@ namespace SiteCrete.Server.API.Client.Database
         public string FileType { get; set; }
         [Ignore]
         public IFormFile File { get; set; }
-
-        [Reference]
-        public List<PictureCategory> PictureCategories { get; set; }
 
     }
 }
